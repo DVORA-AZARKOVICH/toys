@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 
 // http://localhost:3000/toys/search/?s=
 // ?s= -> query string
-router.get("/search/", async (req, res) => {
+/*router.get("/search", async (req, res) => {
   let perPage = req.query.perPage || 10;
   let page = req.query.page || 1;
   try {
@@ -37,6 +37,25 @@ router.get("/search/", async (req, res) => {
     res.status(500).json({ msg: "err", err });
   }
 });
+*/
+router.get("/search", async (req, res) => {
+  let perPage = req.query.perPage || 10;
+  let page = req.query.page || 1;
+  try {
+    let queryS = req.query.s;
+    let searchReg = new RegExp(queryS, "i")
+    let data = await ToyModel.find({ $or: [{ name: searchReg }, { info: searchReg }] })
+      .limit(perPage)
+      .skip((page - 1) * perPage)
+      .sort({ _id: -1 })
+    res.json(data);
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "there error try again later", err })
+  }
+})
+
 
 //http://localhost:3000/toys/category/:games
 router.get("/prices", async (req, res) => {

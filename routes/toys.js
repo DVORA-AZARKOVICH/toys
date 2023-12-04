@@ -85,7 +85,7 @@ router.get("/category/:catname", async (req, res) => {
   try {
     let category = req.params.catname;
     let searchReg = new RegExp(category, "i")
-    let data = await ToysModel.find({ category: searchReg })
+    let data = await ToyModel.find({ category: searchReg })
       .limit(perPage)
       .skip((page - 1) * perPage)
       .sort({ _id: -1 })

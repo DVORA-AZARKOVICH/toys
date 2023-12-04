@@ -18,26 +18,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// http://localhost:3000/toys/search/?s=
-// ?s= -> query string
-/*router.get("/search", async (req, res) => {
-  let perPage = req.query.perPage || 10;
-  let page = req.query.page || 1;
-  try {
-    let searchQ = req.query.s.toLowerCase();
-    let data = await ToyModel.find({
-      $or: [{ name: searchQ }, {info:searchQ}],
-    })
-      .limit(perPage)
-      .skip((page - 1) * perPage)
-      .sort({ _id: -1 });
-    res.json(data);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ msg: "err", err });
-  }
-});
-*/
 router.get("/search", async (req, res) => {
   let perPage = req.query.perPage || 10;
   let page = req.query.page || 1;
@@ -98,7 +78,7 @@ router.get("/prices", async (req, res) => {
   }
 });
 
-router.get("/category/:xyx", async (req, res) => {
+/*router.get("/category/:xyx", async (req, res) => {
   let perPage = req.query.perPage || 10;
   let page = req.query.page || 1;
   try {
@@ -113,7 +93,25 @@ router.get("/category/:xyx", async (req, res) => {
     res.status(500).json({ msg: "err", err });
   }
 });
+*/
+router.get("/category/:catname", async (req, res) => {
+  let perPage = req.query.perPage || 10;
+  let page = req.query.page || 1;
+  try {
+    let category = req.params.catname;
+    let searchReg = new RegExp(category, "i")
+    let data = await ToysModel.find({ category: searchReg })
+      .limit(perPage)
+      .skip((page - 1) * perPage)
+      .sort({ _id: -1 })
+    res.json(data);
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "there error try again later", err })
+  }
 
+})
 
 router.get("/single/:id", async (req, res) => {
   let perPage = req.query.perPage || 10;

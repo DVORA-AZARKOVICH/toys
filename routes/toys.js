@@ -156,7 +156,7 @@ router.delete("/:idDel",authAdmin, async(req,res) => {
   try {
     let idDel = req.params.idDel;
     let data = await ToyModel.deleteOne({_id:idDel,user_id:req.tokenData._id})
-    //let data = await ToyModel.deleteOne({ _id: idDel });
+
 
     res.json(data);
   } catch (err) {

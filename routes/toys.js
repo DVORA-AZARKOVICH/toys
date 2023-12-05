@@ -160,14 +160,11 @@ router.put("/:idEdit",auth, async(req,res) => {
 }
  */
 router.delete("/:idDel",auth, async(req,res) => {
-//router.delete("/:idDel", async (req, res) => {
   try {
     let idDel = req.params.idDel;
-    // כדי שמשתמש יוכל למחוק רשומה הוא חייב
-    // שלרשומה יהיה את האיי די ביוזר איי די שלו
-    //    let data = await ToyModel.deleteOne({_id:idDel,user_id:req.tokenData._id})
-    let data = await ToyModel.deleteOne({ _id: idDel });
-    // "deletedCount": 1 -  אם יש הצלחה של מחיקה
+    let data = await ToyModel.deleteOne({_id:idDel,user_id:req.tokenData._id})
+    //let data = await ToyModel.deleteOne({ _id: idDel });
+
     res.json(data);
   } catch (err) {
     console.log(err);

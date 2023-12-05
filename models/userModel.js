@@ -10,7 +10,6 @@ let userSchema = new mongoose.Schema({
   date_created: {
     type: Date, default: Date.now()
   },
-  // role of the user if regular user or admin 
   role: {
     type: String, default: "user"
   }

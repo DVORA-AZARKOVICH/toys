@@ -152,16 +152,22 @@ router.put("/:idEdit",auth, async(req,res) => {
   "img": "https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=300"
 }
  */
-router.delete("/:idDel",authAdmin, async(req,res) => {
+
+router.delete("/:delId", auth, async (req, res) => {
   try {
-    let idDel = req.params.idDel;
-    let data = await ToyModel.deleteOne({_id:idDel,user_id:req.tokenData._id})
-
-
-    res.json(data);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ msg: "err", err });
+      let delId = req.params.delId;
+      let data;
+      if (req.tokenData.role == "admin") {
+          data = await UserModel.deleteOne({ _id: delId })
+      }
+      else {
+          data = [{ status: "failed", msg: "You are not admin" }]
+      }
+      res.json(data);
+  }
+  catch (err) {
+      console.log(err);
+      res.status(500).json({ msg: "There error to delete, try again later", err })
   }
 });
 

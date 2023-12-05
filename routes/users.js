@@ -87,4 +87,31 @@ router.post("/login", async(req,res) => {
   }
 })
 
+router.put("/:editId", auth, async (req, res) => {
+  let validBody = validUser(req.body);
+  if (validBody.error) {
+      return res.status(400).json(validBody.error.details);
+  }
+  try {
+      let editId = req.params.editId;
+      let data;
+      req.body.password = await bcrypt.hash(req.body.password, 10);
+      console.log(req.body);
+      if (req.tokenData.role == "admin") {
+          data = await UserModel.updateOne({ _id: editId }, req.body)
+      }
+      else if (editId == req.tokenData._id) {
+          data = await UserModel.updateOne({ _id: editId }, req.body);
+      }
+      else {
+          data = [{ status: "failed", msg: "You are not allowed to edit" }]
+      }
+      res.json(data);
+  }
+  catch (err) {
+      console.log(err);
+      res.status(500).json({ msg: "There error to edit user, try again later", err })
+  }
+})
+
 module.exports = router;

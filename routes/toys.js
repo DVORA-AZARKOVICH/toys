@@ -115,17 +115,12 @@ router.get("/single/:id", async (req, res) => {
 });
 
 router.post("/", auth, async(req,res) => {
-//router.post("/", async (req, res) => {
   let valdiateBody = validateToy(req.body);
   if (valdiateBody.error) {
     return res.status(400).json(valdiateBody.error.details);
   }
   try {
     let toy = new ToyModel(req.body);
-    // הוספת מאפיין האיי די של המשתמש
-    // בהמשך יעזור לנו לזהות שירצה למחוק או לערוך רשומה
-    //  tokenData._id; -> מגיע מפונקציית האוט מהטוקן ומכיל את
-    // האיי די של המשתמש
       toy.user_id = req.tokenData._id;
     await toy.save();
     res.status(201).json(toy);
@@ -135,7 +130,6 @@ router.post("/", auth, async(req,res) => {
   }
 });
 router.put("/:idEdit",auth, async(req,res) => {
-//router.put("/:idEdit", async (req, res) => {
   let valdiateBody = validateToy(req.body);
   if (valdiateBody.error) {
     return res.status(400).json(valdiateBody.error.details);
@@ -143,7 +137,6 @@ router.put("/:idEdit",auth, async(req,res) => {
   try {
     let idEdit = req.params.idEdit;
     let data = await ToyModel.updateOne({ _id: idEdit }, req.body);
-    // modfiedCount:1 - אם יש הצלחה
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -159,7 +152,7 @@ router.put("/:idEdit",auth, async(req,res) => {
   "img": "https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=300"
 }
  */
-router.delete("/:idDel",auth, async(req,res) => {
+router.delete("/:idDel",authAdmin, async(req,res) => {
   try {
     let idDel = req.params.idDel;
     let data = await ToyModel.deleteOne({_id:idDel,user_id:req.tokenData._id})

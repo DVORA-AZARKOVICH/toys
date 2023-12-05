@@ -153,7 +153,7 @@ router.put("/:idEdit",auth, async(req,res) => {
 }
  */
 
-router.delete("/:delId", auth, async (req, res) => {
+router.delete("/:delId", authAdmin, async (req, res) => {
   try {
       let delId = req.params.delId;
       let data;

@@ -1,5 +1,5 @@
 const express = require("express");
-const {auth} = require("../middlewares/auth");
+const {auth, authAdmin} = require("../middlewares/auth");
 const { ToyModel, validateToy } = require("../models/toyModel");
 const router = express.Router();
 
@@ -152,7 +152,7 @@ router.put("/:idEdit",auth, async(req,res) => {
   "img": "https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&w=300"
 }
  */
-router.delete("/:idDel",auth, async(req,res) => {
+router.delete("/:idDel",authAdmin, async(req,res) => {
   try {
     let idDel = req.params.idDel;
     let data = await ToyModel.deleteOne({_id:idDel,user_id:req.tokenData._id})
